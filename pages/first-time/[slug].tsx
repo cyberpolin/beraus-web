@@ -3,7 +3,7 @@ import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import {gql} from 'graphql-tag'
 import {useQuery, useMutation} from '@apollo/client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
@@ -35,11 +35,15 @@ const SIGNIN_MUTATION = gql`
     }
   }
 `
-
+// @ts-ignore
 const Header = ({children}) => (
   <div className={styles.header}>{children}</div>
 )
 
+type passwordProp = {
+  confirmPassword: string
+  password: string
+}
 
 const Home: NextPage = () => {
   const query = useQuery(CURRENT_USER_QUERY)
@@ -60,7 +64,7 @@ const Home: NextPage = () => {
     }
   })
   console.log('formik >> ', formik)
-  const login = async (values) => {
+  const login = async (values: passwordProp) => {
     
     console.log('values ', values)
     
@@ -92,7 +96,8 @@ const Home: NextPage = () => {
       </Header>
 
       <main className={styles.main}>
-            {user && <iframe allowfullscreen height="100vh" width="100%" className={styles.iframe} src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQnhCiDNliaGXEIXO3FFyWgZ0nLFeiaAp77ASDVZjQML8CzZTXsdhdgKyMxUyImmPAoRnirPWQxFY7K/pubhtml?widget=true&amp;headers=true"></iframe>}
+        
+            {user && <iframe allowFullScreen height="100vh" width="100%" className={styles.iframe} src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQnhCiDNliaGXEIXO3FFyWgZ0nLFeiaAp77ASDVZjQML8CzZTXsdhdgKyMxUyImmPAoRnirPWQxFY7K/pubhtml?widget=true&amp;headers=true"></iframe>}
         <div>
           <div>
           </div>

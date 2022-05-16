@@ -37,6 +37,7 @@ const SIGNIN_MUTATION = gql`
   }
 `
 
+//@ts-ignore
 const Header = ({children}) => (
   <div className={styles.header}>{children}</div>
 )
@@ -60,10 +61,12 @@ const Home: NextPage = () => {
       password: formik.values.password
     }
   })
-  console.log('formik >> ', formik)
-  const login = async (values) => {
-    
-    console.log('values ', values)
+  
+  type LoginValues = {
+    email: string
+    password: string
+  }
+  const login = async (values:LoginValues) => {
     
     try {
       const {data: {authenticateUserWithPassword: {item}}} = await signin()
@@ -93,7 +96,7 @@ const Home: NextPage = () => {
       </Header>
 
       <main className={styles.main}>
-            {user && <iframe allowfullscreen height="100vh" width="100%" className={styles.iframe} src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQnhCiDNliaGXEIXO3FFyWgZ0nLFeiaAp77ASDVZjQML8CzZTXsdhdgKyMxUyImmPAoRnirPWQxFY7K/pubhtml?widget=true&amp;headers=true"></iframe>}
+            {user && <iframe allowFullScreen height="100vh" width="100%" className={styles.iframe} src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQnhCiDNliaGXEIXO3FFyWgZ0nLFeiaAp77ASDVZjQML8CzZTXsdhdgKyMxUyImmPAoRnirPWQxFY7K/pubhtml?widget=true&amp;headers=true"></iframe>}
         <div>
           <div>
           </div>
