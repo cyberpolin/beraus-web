@@ -1,17 +1,16 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
 import {gql} from 'graphql-tag'
 import {useQuery, useMutation} from '@apollo/client'
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-const loginSchema = Yup.object().shape({
-  email: Yup.string()
-  .required('Required'),
-  password: Yup.string()
-  .required('Required'),
+const passwordSchema = Yup.object().shape({
+  password: Yup.string().required('Password is required').min(4),
+  confirmPassword: Yup.string()
+     .oneOf([Yup.ref('password'), null], 'Passwords must match')
 
 })
 
@@ -46,18 +45,18 @@ const Home: NextPage = () => {
   const query = useQuery(CURRENT_USER_QUERY)
   const formik = useFormik({
     initialValues:{
-      email: '',
+      confirmPassword: '',
       password: ''
     },
     onSubmit: values => login(values),
-    validationSchema: loginSchema
+    validationSchema: passwordSchema
   })
    const [user, setUser] = useState()
 
   const [signin, { data, error, loading}] = useMutation(SIGNIN_MUTATION, {
     variables:{
-      email: formik.values.email,
-      password: formik.values.password
+      password: formik.values.password,
+      confirmPassword: formik.values.confirmPassword
     }
   })
   console.log('formik >> ', formik)
@@ -86,8 +85,8 @@ const Home: NextPage = () => {
 
       <Header>
         <div className={styles.titleDiv}>
-          <h1>Asociación de colonos de Cumbres 7</h1>
-          <h4>Villahermosa Tabasco</h4>
+          <h1>Bienvenido(a) al sistema de información de Cumbres 7</h1>
+          <h4>Necesitas un password, por favor elige uno...</h4>
         </div>
         <img src={'/images/logo.png'} className={styles.logo} />
       </Header>
@@ -99,16 +98,16 @@ const Home: NextPage = () => {
           </div>
           <div>
             {!user && <>
-            <h2>Log in into Cumbres 7 dashboard</h2>
+            <h2>Ingresa tu password</h2>
             
                 <form method='POST' onSubmit={formik.handleSubmit}>
-                  <input name='email' autoComplete='email' onChange={formik.handleChange} value={formik.values?.email} type="text" placeholder='Email' />
-                  <span className={styles.error}>{formik.errors.email}</span>
                   <input name='password' autoComplete='password' onChange={formik.handleChange} value={formik.values?.password} type="password" placeholder='Password' />
                   <span className={styles.error}>{formik.errors.password}</span>
-                  <input type="submit" name={loading? 'Loading...' : 'Log in'} />
+                  <input name='confirmPassword' autoComplete='password' onChange={formik.handleChange} value={formik.values?.confirmPassword} type="password" placeholder='Confirm Password' />
+                  <span className={styles.error}>{formik.errors.confirmPassword}</span>
+                  <input type="submit" value={loading? 'Loading...' : 'Log in'} />
                 </form>
-            
+              <p>Una ves  que ingreses tu nuevo password te redireccionaremos al area de inicio...</p>
             </>}
           </div>
         </div>
