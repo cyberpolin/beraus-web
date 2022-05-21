@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import {ApolloProvider, ApolloClient, InMemoryCache} from '@apollo/client'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/api/graphql',
+  uri: 'https://beraus-backend.herokuapp.com/api/graphql',
   cache: new InMemoryCache()
 })
 

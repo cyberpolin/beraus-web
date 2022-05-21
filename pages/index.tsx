@@ -8,7 +8,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 const loginSchema = Yup.object().shape({
-  email: Yup.string()
+  email: Yup.string().email()
   .required('Required'),
   password: Yup.string()
   .required('Required'),
