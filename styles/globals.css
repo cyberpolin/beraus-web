@@ -7,13 +7,27 @@ body {
 }
 
 form {
-
+  align-items: center;
+  display: flex;
+  flex-direction: column; 
 }
 
 form > input {
   border: 1px solid;
   border-color: #00537A66;
   color: #00537A;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  width: 70%;
+  display: block;
+}
+
+form > input[type='submit'] {
+  border: 1px solid;
+  border-color: #FFF;
+  color: #FFF;
+  background-color: #768171;
   border-radius: 5px;
   padding: 10px;
   margin: 10px;

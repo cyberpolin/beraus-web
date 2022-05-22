@@ -23,7 +23,6 @@ query {
 }
 `
 
-
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!){
     authenticateUserWithPassword(email: $email, password: $password){
@@ -54,6 +53,7 @@ const Home: NextPage = () => {
     validationSchema: loginSchema
   })
    const [user, setUser] = useState()
+   const [formError, setError] = useState('null')
 
   const [signin, { data, error, loading}] = useMutation(SIGNIN_MUTATION, {
     variables:{
@@ -72,13 +72,13 @@ const Home: NextPage = () => {
       const {data: {authenticateUserWithPassword: {item}}} = await signin()
       if (item) {
         setUser(item)
+      } 
+      if(data && !item) {
+        setError('Something went wrong while login in, please be sure the email and password is right.')
       }
-    } catch (error){
-      console.log('error>> ', error)
-    }
+    } catch (error){}
     
   }
-    console.log('user > ', user)
   return (
     <div className={styles.container}>
       <Head>
@@ -106,10 +106,11 @@ const Home: NextPage = () => {
             
                 <form method='POST' onSubmit={formik.handleSubmit}>
                   <input name='email' autoComplete='email' onChange={formik.handleChange} value={formik.values?.email} type="text" placeholder='Email' />
-                  <span className={styles.error}>{formik.errors.email}</span>
+                  {formik.errors.email && <span className={styles.error}>{formik.errors.email}</span>}
                   <input name='password' autoComplete='password' onChange={formik.handleChange} value={formik.values?.password} type="password" placeholder='Password' />
-                  <span className={styles.error}>{formik.errors.password}</span>
+                  {formik.errors.password && <span className={styles.error}>{formik.errors.password}</span>}
                   <input type="submit" name={loading? 'Loading...' : 'Log in'} />
+                  {formError && <span className={styles.error}>{formError}</span>}
                 </form>
             
             </>}
