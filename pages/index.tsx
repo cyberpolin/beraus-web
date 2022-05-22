@@ -53,7 +53,7 @@ const Home: NextPage = () => {
     validationSchema: loginSchema
   })
    const [user, setUser] = useState()
-   const [formError, setError] = useState(null)
+   const [formError, setError] = useState('')
 
   const [signin, { data, error, loading}] = useMutation(SIGNIN_MUTATION, {
     variables:{
