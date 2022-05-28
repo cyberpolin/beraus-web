@@ -3,6 +3,11 @@
   background-image: url(https://www.altozano.com.mx/assets/images/desarrollos/Producto-CLUB-1-TAB.jpg);
 }
 
+.emptyContainer {
+  padding: 0 0rem;
+  background-color: #76817122;
+}
+
 .main {
   min-height: calc(100vh - 200px);
   padding: 4rem 0;
