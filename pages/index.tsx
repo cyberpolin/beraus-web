@@ -74,6 +74,7 @@ const Home: NextPage = () => {
       newPassword: '',
       confirmNewPassword: ''
     },
+     // @ts-ignore: Unknown error
     onSubmit: values => changePassword(values),
     validationSchema: setPasswordSchema
   })
@@ -122,7 +123,7 @@ const Home: NextPage = () => {
   type ChangePasswordValues = {
     email: string
     newPassword: string
-    time: String
+    time: string
   }
 
   const login = async (values:LoginValues) => {  
@@ -149,13 +150,13 @@ const Home: NextPage = () => {
         })
       }
     } catch (error){
-      console.log('error >> ', error.message)
       setError('Something went wrong while login in, please be sure the email and password is right.')
     }
   }
 
   return (
     <div className={styles.container}>
+      <>
       <Head>
         <title>Altozano Tabasco - Asociación de vecinos Cumbres 7</title>
         <meta name="description" content="Cumbres 7 Altozano Tabasco" />
@@ -176,7 +177,21 @@ const Home: NextPage = () => {
           <div>
           </div>
           <div>
-            {user && !user?.lastPasswordUpdate && <>
+            {!user.email && !user?.lastPasswordUpdate && !user?.email && <>
+            <h2>Log in into Cumbres 7 dashboard</h2>
+            
+                <form method='POST' onSubmit={formik.handleSubmit}>
+                  <input name='email' autoComplete='email' onChange={formik.handleChange} value={formik.values?.email} type="text" placeholder='Email' />
+                  {formik.errors.email && <span className={styles.error}>{formik.errors.email}</span>}
+                  <input name='password' autoComplete='password' onChange={formik.handleChange} value={formik.values?.password} type="password" placeholder='Password' />
+                  {formik.errors.password && <span className={styles.error}>{formik.errors.password}</span>}
+                  <input type="submit" name={loading? 'Loading...' : 'Log in'} />
+                  {formError && <span className={styles.error}>{formError}</span>}
+                </form>
+            
+            </>}
+
+            {user.email && !user?.lastPasswordUpdate && <>
             <h2>Por favor actualiza tu password por primera ves, de esta manera solo tu la tendras...</h2>
             
                 <form method='POST' onSubmit={setPassword.handleSubmit}>
@@ -186,19 +201,6 @@ const Home: NextPage = () => {
                   {setPassword.errors.newPassword && <span className={styles.error}>{setPassword.errors.newPassword}</span>}
                   <input name='confirmNewPassword' autoComplete='password' onChange={setPassword.handleChange} value={setPassword.values?.confirmNewPassword} type="password" placeholder='Confirma tu password nuevo' />
                   {setPassword.errors.confirmNewPassword && <span className={styles.error}>{setPassword.errors.confirmNewPassword}</span>}
-                  <input type="submit" name={loading? 'Loading...' : 'Log in'} />
-                  {formError && <span className={styles.error}>{formError}</span>}
-                </form>
-            
-            </>}
-            {!user && <>
-            <h2>Log in into Cumbres 7 dashboard</h2>
-            
-                <form method='POST' onSubmit={formik.handleSubmit}>
-                  <input name='email' autoComplete='email' onChange={formik.handleChange} value={formik.values?.email} type="text" placeholder='Email' />
-                  {formik.errors.email && <span className={styles.error}>{formik.errors.email}</span>}
-                  <input name='password' autoComplete='password' onChange={formik.handleChange} value={formik.values?.password} type="password" placeholder='Password' />
-                  {formik.errors.password && <span className={styles.error}>{formik.errors.password}</span>}
                   <input type="submit" name={loading? 'Loading...' : 'Log in'} />
                   {formError && <span className={styles.error}>{formError}</span>}
                 </form>
@@ -214,11 +216,12 @@ const Home: NextPage = () => {
           href="https://cyberpolin.com"
           target="_blank"
           rel="noopener noreferrer"
-        >
+          >
           Powered by cyberpolin.com
           
         </a>
       </footer>
+          </>
     </div>
   )
 }
