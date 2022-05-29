@@ -86,7 +86,11 @@ const Home: NextPage = () => {
     onSubmit: values => login(values),
     validationSchema: loginSchema
   })
-   const [user, setUser] = useState()
+   const [user, setUser] = useState({
+     email: null,
+     id: null,
+     lastPasswordUpdate: null
+   })
    const [formError, setError] = useState('')
 
   const [signin, { data, error, loading}] = useMutation(SIGNIN_MUTATION, {
@@ -103,6 +107,12 @@ const Home: NextPage = () => {
       time: new Date().toISOString(),
     }
   })
+
+  type User = {
+    email: string
+    id: string
+    lastPasswordUpdate: string
+  }
   
   type LoginValues = {
     email: string
@@ -110,8 +120,9 @@ const Home: NextPage = () => {
   }
   
   type ChangePasswordValues = {
-    oldPassword: string
+    email: string
     newPassword: string
+    time: String
   }
 
   const login = async (values:LoginValues) => {  
@@ -125,6 +136,8 @@ const Home: NextPage = () => {
       }
     } catch (error){}
   }
+
+  
   
   const changePassword = async (values:ChangePasswordValues) => {
     try {
